@@ -20,6 +20,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+//            barButtonSystemItem: .bookmarks,
+            image: UIImage(systemName: "person.fill.questionmark"),
+            style: .plain,
+            target: self,
+            action: #selector(scoreTapped)
+        )
+        
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
         button1.layer.borderWidth = 1
@@ -42,7 +50,8 @@ class ViewController: UIViewController {
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
         title = countries[correctAnswer].uppercased()
-        title = "Your score is: \(score)    |  Please choose " + title!
+//        title = "Your score is: \(score)    |  Please choose " + title!
+        title = "Please choose " + title!
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
@@ -80,5 +89,34 @@ class ViewController: UIViewController {
         }
     }
     
+    @objc func scoreTapped() {
+        var ac = UIAlertController()
+        ac = UIAlertController(title: "Your Score", message: "Your actual score is \(score).", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+    
 }
 
+extension UIBarButtonItem.SystemItem {
+    func image() -> UIImage? {
+        let tempItem = UIBarButtonItem(barButtonSystemItem: self,
+                                       target: nil,
+                                       action: nil)
+
+        let bar = UIToolbar()
+        bar.setItems([tempItem],
+                     animated: false)
+        bar.snapshotView(afterScreenUpdates: true)
+
+        // imageを取得する
+        let itemView = tempItem.value(forKey: "view") as! UIView
+        for view in itemView.subviews {
+            if let button = view as? UIButton,
+                let image = button.imageView?.image {
+                return image.withRenderingMode(.alwaysTemplate)
+            }
+        }
+        return nil
+    }
+}
