@@ -21,7 +21,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-//            barButtonSystemItem: .bookmarks,
             image: UIImage(systemName: "person.fill.questionmark"),
             style: .plain,
             target: self,
@@ -96,27 +95,4 @@ class ViewController: UIViewController {
         present(ac, animated: true)
     }
     
-}
-
-extension UIBarButtonItem.SystemItem {
-    func image() -> UIImage? {
-        let tempItem = UIBarButtonItem(barButtonSystemItem: self,
-                                       target: nil,
-                                       action: nil)
-
-        let bar = UIToolbar()
-        bar.setItems([tempItem],
-                     animated: false)
-        bar.snapshotView(afterScreenUpdates: true)
-
-        // imageを取得する
-        let itemView = tempItem.value(forKey: "view") as! UIView
-        for view in itemView.subviews {
-            if let button = view as? UIButton,
-                let image = button.imageView?.image {
-                return image.withRenderingMode(.alwaysTemplate)
-            }
-        }
-        return nil
-    }
 }
